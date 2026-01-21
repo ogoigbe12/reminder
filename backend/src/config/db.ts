@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 const connectDB = async () => {
+    // add connection to db
     try {
         let mongoUri = process.env.MONGO_URI;
         console.log(`Connecting to MongoDB with URI: ${mongoUri ? mongoUri.split('@')[1] : 'undefined'}`); // Log host only for security
