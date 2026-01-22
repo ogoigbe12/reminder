@@ -114,6 +114,9 @@ const AddEditScreen = () => {
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Save Reminder</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.cancelButtonText}>Cancel</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -165,6 +168,18 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  cancelButton: {
+    backgroundColor: colors.surface,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  cancelButtonText: {
+    color: colors.textSecondary,
     fontWeight: 'bold',
     fontSize: 18,
   },
