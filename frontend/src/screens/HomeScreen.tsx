@@ -14,7 +14,7 @@ const HomeScreen = () => {
 
   const fetchReminders = async () => {
     try {
-      const response = await api.get<Reminder[]>('/');
+      const response = await api.get<Reminder[]>('/reminders');
       setReminders(response.data);
     } catch (error) {
       console.error(error);
@@ -36,7 +36,7 @@ const HomeScreen = () => {
         style: 'destructive',
         onPress: async () => {
           try {
-            await api.delete(`/${id}`);
+            await api.delete(`/reminders/${id}`);
             fetchReminders();
           } catch (error) {
             Alert.alert('Error', 'Failed to delete reminder');

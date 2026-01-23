@@ -2,14 +2,19 @@ import PushNotification from 'react-native-push-notification';
 import { Platform, PermissionsAndroid, Alert } from 'react-native';
 
 class NotificationService {
+    private listeners: ((notification: any) => void)[] = [];
+
     configure = () => {
         PushNotification.configure({
             onRegister: function (token) {
                 console.log('TOKEN:', token);
             },
 
-            onNotification: function (notification) {
+            onNotification: (notification) => {
                 console.log('NOTIFICATION RECEIVED:', notification);
+
+                // Notify listeners
+                this.listeners.forEach((listener) => listener(notification));
 
                 // Show alert when notification is received in foreground
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,6 +48,25 @@ class NotificationService {
             },
             (created) => console.log(`createChannel returned '${created}'`)
         );
+    };
+
+    onNotificationOpened = (callback: (notification: any) => void) => {
+        this.listeners.push(callback);
+        return () => {
+            this.listeners = this.listeners.filter((l) => l !== callback);
+        };
+    };
+
+    getInitialNotification = (): Promise<any> => {
+        return new Promise((resolve) => {
+            PushNotification.popInitialNotification((notification) => {
+                if (notification) {
+                    resolve({ notification });
+                } else {
+                    resolve(null);
+                }
+            });
+        });
     };
 
     checkPermissions = async () => {
@@ -100,7 +124,7 @@ class NotificationService {
             allowWhileIdle: true,
             playSound: true,
             soundName: 'default',
-            userInfo: { id },
+            userInfo: { reminderId: id },
         });
     };
 

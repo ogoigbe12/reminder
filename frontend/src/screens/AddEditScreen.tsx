@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import api from '../services/api';
@@ -12,13 +12,38 @@ type AddEditScreenRouteProp = RouteProp<RootStackParamList, 'AddEdit'>;
 const AddEditScreen = () => {
   const navigation = useNavigation();
   const route = useRoute<AddEditScreenRouteProp>();
-  const { reminder } = route.params;
+  const { reminder, id } = route.params;
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentReminder, setCurrentReminder] = useState<Reminder | undefined>(reminder);
+  
   const [title, setTitle] = useState(reminder?.title || '');
   const [description, setDescription] = useState(reminder?.description || '');
   const [date, setDate] = useState(reminder ? new Date(reminder.datetime) : new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [mode, setMode] = useState<'date' | 'time'>('date');
+
+    useEffect(() => {
+        const fetchReminder = async () => {
+            if (!reminder && id) {
+                setIsLoading(true);
+                try {
+                    const response = await api.get<Reminder>(`/reminders/${id}`);
+                    const fetched = response.data;
+                    setCurrentReminder(fetched);
+                    setTitle(fetched.title);
+                    setDescription(fetched.description || '');
+                    setDate(new Date(fetched.datetime));
+                } catch (error) {
+                    Alert.alert('Error', 'Failed to fetch reminder details');
+                    navigation.goBack();
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+        };
+        fetchReminder();
+    }, [id, reminder, navigation]);
 
   const handleSave = async () => {
     if (!title) {
@@ -41,11 +66,11 @@ const AddEditScreen = () => {
 
     try {
       let savedReminder: Reminder;
-      if (reminder) {
-        const response = await api.put<Reminder>(`/${reminder._id}`, data);
+      if (currentReminder) {
+        const response = await api.put<Reminder>(`/reminders/${currentReminder._id}`, data);
         savedReminder = response.data;
       } else {
-        const response = await api.post<Reminder>('/', data);
+        const response = await api.post<Reminder>('/reminders', data);
         savedReminder = response.data;
       }
 
@@ -63,6 +88,14 @@ const AddEditScreen = () => {
       Alert.alert('Error', 'Failed to save reminder');
     }
   };
+
+  if (isLoading) {
+      return (
+          <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+              <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+      );
+  }
 
   const showMode = (currentMode: 'date' | 'time') => {
     setShowPicker(true);

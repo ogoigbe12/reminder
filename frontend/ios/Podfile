@@ -15,6 +15,7 @@ if linkage != nil
 end
 
 target 'frontend' do
+  pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios', :modular_headers => true
   config = use_native_modules!
 
   use_react_native!(

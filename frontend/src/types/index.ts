@@ -8,5 +8,7 @@ export interface Reminder {
 
 export type RootStackParamList = {
     Home: undefined;
-    AddEdit: { reminder?: Reminder };
+    AddEdit: { reminder?: Reminder; id?: string };
+    Login: undefined;
+    Signup: undefined;
 };
