@@ -26,11 +26,18 @@ const AddEditScreen = () => {
       return;
     }
 
+    const hasPermission = await NotificationService.requestPermissions();
+    if (!hasPermission) {
+        Alert.alert('Permission Forbidden', 'Notifications are required to set reminders');
+        return;
+    }
+
     const data = {
       title,
       description,
       datetime: date.toISOString(),
     };
+    console.log('Saving reminder:', data);
 
     try {
       let savedReminder: Reminder;
