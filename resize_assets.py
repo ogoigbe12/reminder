@@ -3,8 +3,8 @@ import subprocess
 import shutil
 
 # Config
-ICON_SOURCE = "/Users/user/.gemini/antigravity/brain/e611660f-d8a1-4069-8275-4e10c496ce3c/uploaded_image_0_1769178072659.jpg"
-SPLASH_SOURCE = "/Users/user/.gemini/antigravity/brain/e611660f-d8a1-4069-8275-4e10c496ce3c/uploaded_image_1_1769178072659.png"
+ICON_SOURCE = "/Users/user/.gemini/antigravity/brain/be7b9938-19bd-458b-a8c1-2c346f5a0474/uploaded_image_1_1769255892842.jpg"
+SPLASH_SOURCE = "/Users/user/.gemini/antigravity/brain/be7b9938-19bd-458b-a8c1-2c346f5a0474/uploaded_image_0_1769255892842.png"
 
 ANDROID_RES = "frontend/android/app/src/main/res"
 IOS_ASSETS = "frontend/ios/frontend/Images.xcassets"
