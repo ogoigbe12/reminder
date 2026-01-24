@@ -1,4 +1,9 @@
 {
   "name": "frontend",
-  "displayName": "Reminder"
+  "displayName": "Reminder",
+  "extra": {
+    "eas": {
+      "projectId": "47d4c246-8765-4035-8aa2-c058ce5e171d"
+    }
+  }
 }
